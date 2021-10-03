@@ -1,0 +1,98 @@
+/*----------------all templates----------------*/
+body {
+	background-image: url('../../images/background.jpg');
+	background-color: rgba(255, 255, 255, 0.35);
+	background-blend-mode: overlay;
+
+	display: flex;
+	flex-direction: column;
+  	min-height: 100vh;
+}
+
+footer {
+	color: #FFFFFF;
+	position: static;
+	bottom: 0;
+	width: 100%;
+	min-height: 50px;
+	padding: 12px;
+	padding-bottom: 0;
+	text-align: center;
+	margin-top: auto;
+	flex: 0 0 50px;
+}
+
+.body-large{
+	background-size: 100%;
+}
+
+.bg-red {
+	background-color: #B31F00;
+}
+
+.txt {
+	color: #FFFFFF;
+}
+
+/*----------------video template----------------*/
+
+.accordion-button,
+.accordion-button:not(.collapsed) {
+	background-color: #B31F00;
+	color: #FFFFFF;
+}
+
+.accordion-button:after {
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>") !important;
+}
+
+#film-cover {
+	height: auto;
+}
+
+/*----------------index y mainpage templates----------------*/
+
+.carousel .carousel-item {
+    transition-duration: 0.65s;
+}
+
+#carousel-container {
+	width:600px;
+}
+
+/*----------------login y register templates----------------*/
+
+#login-card, 
+#register-card {
+	margin-top: 10vh;
+}
+
+/*----------------search template----------------*/
+
+.modal-open {
+    overflow: scroll;
+}
+
+.icon-custom{
+	font-size:4rem;
+	color: #FFFFFF;
+}
+
+#filters{
+    min-width: min-content;
+}
+
+#cover-card{
+	padding: 5px;
+}
+
+#film-dropdwon {
+	position: absolute;
+	margin-top: 5px;
+	margin-left: 83%;
+}
+
+#add-icon {
+	margin-top: 40%;
+	margin-bottom: 40%
+}
