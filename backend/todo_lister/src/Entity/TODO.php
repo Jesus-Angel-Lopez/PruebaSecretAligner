@@ -12,7 +12,8 @@ class TODO
 {
     public function __construct()
     {
-        $this->setCreatedAt(new \DateTime('now'));
+        $this->setFechaCreacion(new \DateTime('now'));
+        $this->setRealizada(false);
     }
 
     /**
@@ -76,9 +77,9 @@ class TODO
         return $this->fecha_tope;
     }
 
-    public function setFechaTope(\DateTimeInterface $fecha_tope): self
+    public function setFechaTope(string $fecha_tope): self
     {
-        $this->fecha_tope = $fecha_tope;
+        $this->fecha_tope = new \DateTime($fecha_tope);
 
         return $this;
     }

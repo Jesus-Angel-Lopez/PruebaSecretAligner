@@ -1,0 +1,17 @@
+{% extends "todoList/base_templates/layout.html.twig" %}
+
+{% block logged %}
+	<a class="navbar-brand" href="{{ path('todolist_view') }}"><b>TODO Lister</b></a>
+{% endblock %}
+
+{% block searchbar %}
+	<form class="d-flex" action={{ path('logout_request') }} method='post'>
+		<button class="btn btn-outline-light btn-serch" type="submit">
+        		<div><i class="bi bi-power"> Cerrar Sesión</i></div>
+        </button>
+	</form>
+{% endblock %}
+
+
+{% block content %}
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "todoList/base_templates/logged.html.twig" %}
+
+{% block content %}
+
+<div class="container mt-5 mb-5">
+	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#crearTODO" data-bs-whatever="@crear">
+		<i class="bi bi-list-task"></i> Añadir TODO</button>
+	<div class="table-responsive">
+	    <table class="table table-dark table-striped table-bordered">
+		  <thead>
+		    <tr>
+		      <th scope="col">Nombre</th>
+		      <th scope="col">Fecha Creación</th>
+		      <!--<th scope="col">Admin</th>-->
+		      <th scope="col-3">Fecha Tope</th>
+		    </tr>
+		  </thead>
+
+		  <tbody>
+	    	{% for todo in todoList %}
+		    <tr>
+				<td>{{ todo.nombre }}</td>
+				<td>{{ todo.fechaCreacion|date('Y-m-d H:i:s') }}</td>
+				<td>{{ todo.fechaTope|date('Y-m-d H:i:s') }}</td>
+		    </tr>
+	    	{% endfor %}
+		  </tbody>
+
+		</table>
+	</div>
+
+	<!--modals-->
+	<div class="modal fade" id="crearTODO" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog ">
+			<div class="modal-content bg-dark txt">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Añadir Usuario</h5>
+					<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form action="{{ path('create_request') }}" method="post">
+					<div class="modal-body">
+						<div class="mb-3">
+							<label for="nombre" class="col-form-label">Nombre:</label>
+							<input type="string" class="form-control" name="nombre" id="nombre" required="true">
+						</div>
+						<div class="row justify-content-center mb-4">
+							<div class="col-9">
+								<label for="inputFecha1" class="form-label txt">Fecha Tope</label>
+								<input type="date" class="form-control" name="fechaTope" required="true">
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn bg-red txt" data-bs-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-primary">Añadir</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}
