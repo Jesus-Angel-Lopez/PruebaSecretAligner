@@ -35,4 +35,29 @@ class RequestController extends AbstractController
         return $this->redirectToRoute('todolist_view');
     }
 
+    /**
+     * @Route("/{todo_id}/{status}", name="changeStatus_request", methods={"PUT"})
+     */
+    public function estado($todo_id, $status, EntityManagerInterface $em){
+        $estado = !($status=='completada');
+        var_dump($estado);
+        $repository = $em->getRepository(TODO::class);
+        /** @var TODO|null $todo */
+        $todo = $repository->findOneBy(['id' => $todo_id]);
+        if(!$todo){
+            throw $this->createNotFoundException(sprintf('La tarea que desea editar no existe'));
+        } else{
+            if ($todo->isRealizada()!=$estado) {
+                throw new \BadMethodCallException(sprintf('El cambio de estado que desea realizar no es posible'));
+            } else{
+                $todo->setRealizada(!$todo->isRealizada());
+                $em->persist($todo);
+                $em->flush();
+                return new Response('Content',
+                    Response::HTTP_OK,
+                    array('content-type' => 'text/html'));
+            }
+        }
+    }
+
 }

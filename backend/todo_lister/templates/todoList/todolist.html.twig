@@ -11,8 +11,8 @@
 		    <tr>
 		      <th scope="col">Nombre</th>
 		      <th scope="col">Fecha Creación</th>
-		      <!--<th scope="col">Admin</th>-->
-		      <th scope="col-3">Fecha Tope</th>
+		      <th scope="col">Fecha Tope</th>
+				<th scope="col-3">Completado</th>
 		    </tr>
 		  </thead>
 
@@ -22,6 +22,44 @@
 				<td>{{ todo.nombre }}</td>
 				<td>{{ todo.fechaCreacion|date('Y-m-d H:i:s') }}</td>
 				<td>{{ todo.fechaTope|date('Y-m-d H:i:s') }}</td>
+				<td class="col-3">
+
+					<script type="text/javascript">
+						$(document).ready(function () {
+							$("#cambiar_estado{{todo.id}}").on('click',function (event) {
+
+								event.preventDefault();
+
+								$.ajax({
+									type: "PUT",
+									url: event.currentTarget.action,
+									data: $("#cambiar_estado{{todo.id}}").serialize(),
+									dataType: "json",
+									encode: true,
+								})
+
+								location.reload();
+							});
+						});
+					</script>
+					{% if todo.realizada %}
+					<form id="cambiar_estado{{todo.id}}" class="d-flex" action="{{ path('changeStatus_request',{todo_id: todo.id, status: 'pendiente'}) }}" method="post">
+						<div class="form-check" type="submit">
+							<input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+							<label class="form-check-label" for="flexCheckChecked">
+							</label>
+						</div>
+					</form>
+					{% else %}
+					<form id="cambiar_estado{{todo.id}}" class="d-flex" action="{{ path('changeStatus_request',{todo_id: todo.id, status: 'completada'}) }}" method="post">
+						<div class="form-check" type="submit">
+							<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+							<label class="form-check-label" for="flexCheckDefault">
+							</label>
+						</div>
+					</form>
+					{% endif %}
+				</td>
 		    </tr>
 	    	{% endfor %}
 		  </tbody>

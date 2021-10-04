@@ -84,7 +84,7 @@ class TODO
         return $this;
     }
 
-    public function estaRealizada(): ?bool
+    public function isRealizada(): ?bool
     {
         return $this->realizada;
     }
