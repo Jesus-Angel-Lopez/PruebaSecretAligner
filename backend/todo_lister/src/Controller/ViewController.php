@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ViewController extends AbstractController
 {
     /**
-     * @Route("/", name="todolist_view", methods={"GET"})
+     * @Route("/todoList/{list_id}", name="todolist_view", methods={"GET"})
      */
     public function homepage(EntityManagerInterface $em){
 

@@ -22,7 +22,7 @@ class RequestController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="create_request", methods={"POST"})
+     * @Route("todoList/new", name="create_request", methods={"POST"})
      */
     public function create(Request $request, EntityManagerInterface $em){
 
@@ -36,7 +36,7 @@ class RequestController extends AbstractController
     }
 
     /**
-     * @Route("/{todo_id}/{status}", name="changeStatus_request", methods={"PUT"})
+     * @Route("todoList/{todo_id}/{status}", name="changeStatus_request", methods={"PUT"})
      */
     public function estado($todo_id, $status, EntityManagerInterface $em){
         $estado = !($status=='completada');

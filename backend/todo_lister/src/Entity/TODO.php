@@ -43,6 +43,12 @@ class TODO
      */
     private $realizada;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=ListaTODO::class, inversedBy="tODOs")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $lista;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -92,6 +98,18 @@ class TODO
     public function setRealizada(bool $realizada): self
     {
         $this->realizada = $realizada;
+
+        return $this;
+    }
+
+    public function getLista(): ?ListaTODO
+    {
+        return $this->lista;
+    }
+
+    public function setLista(?ListaTODO $lista): self
+    {
+        $this->lista = $lista;
 
         return $this;
     }
