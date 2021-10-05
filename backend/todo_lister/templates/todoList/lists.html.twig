@@ -1,0 +1,116 @@
+{% extends "todoList/base_templates/logged.html.twig" %}
+
+{% block content %}
+
+<div class="container mt-5 mb-5">
+	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#crearLista" data-bs-whatever="@crear">
+		<i class="bi bi-list-task"></i> Añadir Lista</button>
+	<div class="table-responsive">
+	    <table class="table table-dark table-striped table-bordered">
+		  <thead>
+		    <tr>
+		      <th scope="col">Nombre</th>
+		      <th scope="col">Propietario</th>
+				{% if admin %}
+				<th scope="col">Acciones</th>
+				{% endif %}
+		    </tr>
+		  </thead>
+
+		  <tbody>
+	    	{% for list in lists %}
+		    <tr>
+				<td>{{ list.nombre }}</td>
+				<td>{{ list.propietario.username }}</td>
+				{% if admin %}
+				<td class="col-2">
+					<script type="text/javascript">
+						$(document).ready(function () {
+							$("#updateOwner_form{{list.id}}").submit(function (event) {
+
+								event.preventDefault();
+
+								$.ajax({
+									type: "PUT",
+									url: event.currentTarget.action,
+									data: $("#updateOwner_form{{list.id}}").serialize(),
+									dataType: "json",
+									encode: true,
+								})
+
+								location.reload();
+							});
+						});
+					</script>
+						<div class="modal fade" id="modificarPropietario{{list.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog ">
+								<div class="modal-content bg-dark txt">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel">Editar Propietario</h5>
+										<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<form id="updateOwner_form{{list.id}}" action={{ path('updateListOwner_request',{list_id: list.id}) }} method="post" onsubmit="$('#modificarPropietario{{list.id}}').modal('hide');">
+										<div class="modal-body">
+											<div class="row justify-content-center mb-4">
+												<div class="col-9">
+													<label for="inputFecha1" class="form-label txt">Propietario</label>
+													<input type="integer" class="form-control" name="propietario" value="{{list.propietario.username}}" required="true">
+												</div>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn bg-red txt" data-bs-dismiss="modal">Cerrar</button>
+											<button type="submit" class="btn btn-primary">Editar</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modificarPropietario{{ list.id }}" data-bs-whatever="@editar">
+						<i class="bi bi-pencil-square"></i></button>
+				</td>
+				{% endif %}
+		    </tr>
+	    	{% endfor %}
+		  </tbody>
+
+		</table>
+	</div>
+
+	<!--modals-->
+	<div class="modal fade" id="crearLista" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog ">
+			<div class="modal-content bg-dark txt">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Añadir Lista</h5>
+					<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form action="{{ path('createList_request') }}" method="post">
+					<div class="modal-body">
+						<div class="mb-3">
+							<label for="nombre" class="col-form-label">Nombre:</label>
+							<input type="string" class="form-control" name="nombre" id="nombre" required="true">
+						</div>
+						<div class="row justify-content-center mb-4">
+							<div class="col-9">
+								<label for="inputFecha1" class="form-label txt">Propietario</label>
+								{% if admin %}
+								<input type="string" class="form-control" name="propietario" required="true">
+								{% else %}
+								<input type="string" class="form-control" name="propietario" value="{{username}}" required="true">
+								{% endif %}
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn bg-red txt" data-bs-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-primary">Añadir</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}

@@ -3,7 +3,9 @@
 
 namespace App\Controller;
 
+use App\Entity\ListaTODO;
 use App\Entity\TODO;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,9 +24,9 @@ class RequestController extends AbstractController
     }
 
     /**
-     * @Route("todoList/new", name="create_request", methods={"POST"})
+     * @Route("todoList/new", name="createTODO_request", methods={"POST"})
      */
-    public function create(Request $request, EntityManagerInterface $em){
+    public function createTODO(Request $request, EntityManagerInterface $em){
 
         $todo = new TODO();
         $todo->setNombre($request->request->get('nombre'));
@@ -38,9 +40,8 @@ class RequestController extends AbstractController
     /**
      * @Route("todoList/{todo_id}/{status}", name="changeStatus_request", methods={"PUT"})
      */
-    public function estado($todo_id, $status, EntityManagerInterface $em){
+    public function estadoTODO($todo_id, $status, EntityManagerInterface $em){
         $estado = !($status=='completada');
-        var_dump($estado);
         $repository = $em->getRepository(TODO::class);
         /** @var TODO|null $todo */
         $todo = $repository->findOneBy(['id' => $todo_id]);
@@ -52,6 +53,53 @@ class RequestController extends AbstractController
             } else{
                 $todo->setRealizada(!$todo->isRealizada());
                 $em->persist($todo);
+                $em->flush();
+                return new Response('Content',
+                    Response::HTTP_OK,
+                    array('content-type' => 'text/html'));
+            }
+        }
+    }
+
+    /**
+     * @Route("/new", name="createList_request", methods={"POST"})
+     */
+    public function createList(Request $request, EntityManagerInterface $em){
+
+        $list = new ListaTODO();
+        $list->setNombre($request->request->get('nombre'));
+        $repository = $em->getRepository(User::class);
+        /** @var User|null $user */
+        $user = $repository->findOneBy(['username' => $request->request->get('propietario')]);
+        if(!$user) {
+            throw $this->createNotFoundException(sprintf('El usuario para el que intenta crear una lista no existe'));
+        } else {
+            $list->setPropietario($user);
+            $em->persist($list);
+            $em->flush();
+            return $this->redirectToRoute('lists_view');
+        }
+    }
+
+    /**
+     * @Route("/update/{list_id}", name="updateListOwner_request", methods={"PUT"})
+     */
+    public function updateListOwner($list_id, Request $request, EntityManagerInterface $em){
+
+        $repository = $em->getRepository(ListaTODO::class);
+        /** @var ListaTODO|null $list */
+        $list = $repository->findOneBy(['id' => $list_id]);
+        if(!$list) {
+            throw $this->createNotFoundException(sprintf('La lista que intenta modificar no existe'));
+        } else {
+            $repository = $em->getRepository(User::class);
+            /** @var User|null $list */
+            $user = $repository->findOneBy(['username' => $request->request->get('propietario')]);
+            if(!$user) {
+                throw $this->createNotFoundException(sprintf('El usuario con el que intenta modificar una lista no existe'));
+            } else{
+                $list->setPropietario($user);
+                $em->persist($list);
                 $em->flush();
                 return new Response('Content',
                     Response::HTTP_OK,
