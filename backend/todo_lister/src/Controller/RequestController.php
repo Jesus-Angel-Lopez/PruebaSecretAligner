@@ -17,13 +17,6 @@ class RequestController extends AbstractController
 {
 
     /**
-     * @Route("/logout", name="logout_request", methods={"POST"})
-     */
-    public function logout(){
-        return $this->redirectToRoute('login_view');
-    }
-
-    /**
      * @Route("todoList/new", name="createTODO_request", methods={"POST"})
      */
     public function createTODO(Request $request, EntityManagerInterface $em){

@@ -4,6 +4,10 @@
 	<a class="navbar-brand" href="{{ path('lists_view') }}"><b>TODO Lister</b></a>
 {% endblock %}
 
+{% block admin %}
+
+{% endblock %}
+
 {% block searchbar %}
 	<form class="d-flex" action={{ path('app_logout') }} method='post'>
 		<button class="btn btn-outline-light btn-serch" type="submit">
