@@ -30,7 +30,7 @@
 		  <tbody>
 	    	{% for list in lists %}
 		    <tr>
-				<td>{{ list.nombre }}</td>
+				<td> <a href="{{ path('todolist_view',{list_id: list.id})  }}">{{ list.nombre }}</a></td>
 				<td>{{ list.propietario.username }}</td>
 				{% if admin %}
 				<td class="col-2">

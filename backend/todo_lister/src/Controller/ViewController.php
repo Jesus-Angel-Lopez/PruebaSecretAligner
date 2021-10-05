@@ -18,6 +18,10 @@ class ViewController extends AbstractController
      * @Route("/todoList/{list_id}", name="todolist_view", methods={"GET"})
      */
     public function todolist($list_id, EntityManagerInterface $em){
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+
         $repository = $em->getRepository(ListaTODO::class);
         /** @var ListaTODO|null $list */
         $list = $repository->findOneBy(['id' => $list_id]);
@@ -27,7 +31,10 @@ class ViewController extends AbstractController
             $todolist = $em->getRepository(TODO::class)->findBy(['lista' => $list]);
 
             return $this->render('todoList/todolist.html.twig', [
-                'todoList' => $todolist, 'admin' => in_array("ROLE_ADMIN", $this->getUser()->getRoles())
+                'todoList' => $todolist,
+                'admin' => in_array("ROLE_ADMIN", $this->getUser()->getRoles()),
+                'esPropietario' => $list->getPropietario() == $this->getUser(),
+                'lista' => $list_id
             ]);
         }
     }
@@ -36,6 +43,9 @@ class ViewController extends AbstractController
      * @Route("/", name="lists_view", methods={"GET"})
      */
     public function homepage(EntityManagerInterface $em){
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
 
         if(in_array("ROLE_ADMIN",$this->getUser()->getRoles())){
             $lists = $em->getRepository(ListaTODO::class)->findAll();
@@ -43,7 +53,9 @@ class ViewController extends AbstractController
             $lists = $em->getRepository(ListaTODO::class)->findBy(['propietario' => $this->getUser()]);
         }
         return $this->render('todoList/lists.html.twig',[
-            'lists' => $lists, 'admin' => in_array("ROLE_ADMIN",$this->getUser()->getRoles()), 'username' => $this->getUser()->getUserIdentifier()
+            'lists' => $lists,
+            'admin' => in_array("ROLE_ADMIN",$this->getUser()->getRoles()),
+            'username' => $this->getUser()->getUserIdentifier()
         ]);
     }
 
@@ -51,10 +63,14 @@ class ViewController extends AbstractController
      * @Route("/users", name="users_view", methods={"GET"})
      */
     public function users(EntityManagerInterface $em){
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
 
         $users = $em->getRepository(User::class)->findAll();
         return $this->render('todoList/users.html.twig',[
-            'users' => $users, 'admin' => in_array("ROLE_ADMIN",$this->getUser()->getRoles())
+            'users' => $users,
+            'admin' => in_array("ROLE_ADMIN",$this->getUser()->getRoles())
         ]);
     }
 

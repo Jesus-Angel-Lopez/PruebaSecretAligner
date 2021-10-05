@@ -17,17 +17,25 @@ class RequestController extends AbstractController
 {
 
     /**
-     * @Route("todoList/new", name="createTODO_request", methods={"POST"})
+     * @Route("todoList/{list_id}/new", name="createTODO_request", methods={"POST"})
      */
-    public function createTODO(Request $request, EntityManagerInterface $em){
+    public function createTODO($list_id, Request $request, EntityManagerInterface $em){
 
         $todo = new TODO();
         $todo->setNombre($request->request->get('nombre'));
         $todo->setFechaTope($request->request->get('fechaTope'));
 
-        $em->persist($todo);
-        $em->flush();
-        return $this->redirectToRoute('todolist_view');
+        $repository = $em->getRepository(ListaTODO::class);
+        /** @var ListaTODO|null $list */
+        $list = $repository->findOneBy(['id' => $list_id]);
+        if(!$list) {
+            throw $this->createNotFoundException(sprintf('La lista a la que intenta añadir un TODO no existe'));
+        } else {
+            $todo->setLista($list);
+            $em->persist($todo);
+            $em->flush();
+            return $this->redirectToRoute('todolist_view',array('list_id' => $list_id));
+        }
     }
 
     /**
